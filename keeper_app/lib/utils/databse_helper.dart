@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -8,13 +9,15 @@ class DataBaseHelper {
   static DataBaseHelper _dataBaseHelper;
 
   // ignore: unused_field
-  Database _database;
+  static Database _database;
   String noteTable = "noteTable";
   String colId = "ID";
   String colTitle = "Title";
   String colDescription = "Description";
   String colDate = "Date";
   String colPriority = "Priority";
+
+  DataBaseHelper._createInstance();
 
   factory DataBaseHelper() {
     if (_dataBaseHelper == null) {
@@ -23,30 +26,35 @@ class DataBaseHelper {
     return _dataBaseHelper;
   }
 
-  static DataBaseHelper _createInstance() {}
+
 
   Future<Database> initializeDataBase() async {
     //get the path directory to store db
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + 'notes.db';
-
+    debugPrint(' -----   $path');
     //open data base and pass create
     var notesDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
+
+
     return notesDatabase;
   }
 
   Future<Database> get database async {
-    if (_database != null) {
+    if (_database == null) {
       _database = await initializeDataBase();
     }
     return _database;
   }
 
   void _createDb(Database db, int newVersion) async {
+    debugPrint(' -----   create');
     await db.execute(
         'CREATE TABLE $noteTable($colId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colTitle TEXT,$colDescription TEXT,$colPriority INTEGER,$colDate TEXT)');
+
+
   }
 
   //fetch operation
@@ -90,5 +98,18 @@ class DataBaseHelper {
     List<Map<String, dynamic>> result = await db.query(noteTable);
     int count = Sqflite.firstIntValue(result);
     return count;
+  }
+
+  //get the map list
+  Future<List<Note>> getNotesList() async {
+    var noteMaplist = await getNotesMapList();
+    int size = noteMaplist.length;
+
+    List<Note> _notesList = List<Note>();
+    for (int i = 0; i < size; i++) {
+      _notesList.add(Note.fromMapToObject(noteMaplist[i]));
+    }
+
+    return _notesList;
   }
 }

@@ -51,21 +51,45 @@ class Note {
     }
 
     map['title'] = _title;
-    map['_description'] = _description;
-    map['_date'] = _date;
-    map['_priority'] = _priority;
+    map['description'] = _description;
+    map['date'] = _date;
+    map['priority'] = _priority;
     return map;
   }
 
-
-  Note.fromMapToObject(Map<String, dynamic> map)
-  {
+  Note.fromMapToObject(Map<String, dynamic> map) {
     this._id = map['id'];
-    this._title = map['title'] ;
-    this._description = map['_description'];
-    this._date = map['_date'];
-    this._priority = map['_priority'] ;
-
+    this._title = map['title'];
+    this._description = map['description'];
+    this._date = map['date'];
+    this._priority = map['priority'];
   }
 
+  //priority text
+  String getPriorityText() {
+    switch (_priority) {
+      case 1:
+        return "High";
+      case 2:
+        return "Medium";
+      case 3:
+        return "Low";
+    }
+  }
+
+  //priority int
+  void updatePriorityInt(String priority) {
+    switch (priority) {
+      case "High":
+        _priority = 1;
+        break;
+
+      case "Medium":
+        _priority = 2;
+        break;
+      case "Low":
+        _priority = 3;
+        break;
+    }
+  }
 }

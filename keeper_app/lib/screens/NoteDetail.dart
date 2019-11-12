@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:keeper_app/models/note.dart';
+import 'package:keeper_app/utils/databse_helper.dart';
+import 'package:sqflite/sqflite.dart';
 
 class NoteDetails extends StatefulWidget {
-  String screenTitle;
+  final String screenTitle;
+  final Note _note;
 
-  NoteDetails(this.screenTitle);
+  NoteDetails(this._note, this.screenTitle);
 
   @override
   State<StatefulWidget> createState() {
-    return _NoteDetails(screenTitle);
+    return _NoteDetails(_note, screenTitle);
   }
 }
 
 class _NoteDetails extends State<NoteDetails> {
+  DataBaseHelper dataBaseHelper = DataBaseHelper();
   double minPadding = 5;
 
   var _formKey = GlobalKey<FormState>();
@@ -21,15 +27,19 @@ class _NoteDetails extends State<NoteDetails> {
 
   var _priority = ["High", "Medium", "Low"];
 
-  String _currentSelected = "High";
-
   String screenTitle;
 
-  _NoteDetails(this.screenTitle);
+  Note _note;
+
+  _NoteDetails(this._note, this.screenTitle) {}
 
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.title;
+
+    titleControler.text = _note.title;
+    contentControler.text = _note.description;
+
     return WillPopScope(
       onWillPop: () {
         //control things when user want to move back from the current screen like backpressed
@@ -60,10 +70,11 @@ class _NoteDetails extends State<NoteDetails> {
                       }).toList(),
                       onChanged: (String newValue) {
                         setState(() {
-                          this._currentSelected = newValue ?? "";
+                          _note.updatePriorityInt(newValue);
                         });
                       },
-                      value: _currentSelected,
+                      style: textStyle,
+                      value: _note.getPriorityText(),
                     ),
                   ),
                   Padding(
@@ -75,7 +86,8 @@ class _NoteDetails extends State<NoteDetails> {
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter title';
-                        }
+                        } else
+                          return "";
                       },
                       decoration: InputDecoration(
                           errorStyle: TextStyle(
@@ -86,6 +98,9 @@ class _NoteDetails extends State<NoteDetails> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                       style: textStyle,
+                      onChanged: (String input) {
+                        _note.title = titleControler.text;
+                      },
 
                       /*onSubmitted: (String userInput) {
                         setState(() {
@@ -103,7 +118,8 @@ class _NoteDetails extends State<NoteDetails> {
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter description';
-                        }
+                        } else
+                          return "";
                       },
                       decoration: InputDecoration(
                           errorStyle: TextStyle(
@@ -115,7 +131,9 @@ class _NoteDetails extends State<NoteDetails> {
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(5))),
                       style: textStyle,
-
+                      onChanged: (String input) {
+                        _note.description = contentControler.text;
+                      },
                       /*onSubmitted: (String userInput) {
                         setState(() {
                           principleAmount = userInput;
@@ -135,7 +153,7 @@ class _NoteDetails extends State<NoteDetails> {
                                 color: Theme.of(context).primaryColor,
                                 textColor: Theme.of(context).primaryColorLight,
                                 child: Text(
-                                  "Calculate",
+                                  "Save",
                                   textScaleFactor: 1.2,
                                 ),
                                 onPressed: saveNote)),
@@ -148,10 +166,10 @@ class _NoteDetails extends State<NoteDetails> {
                                 color: Theme.of(context).primaryColorDark,
                                 textColor: Theme.of(context).primaryColorLight,
                                 child: Text(
-                                  "Reset",
+                                  "Delete",
                                   textScaleFactor: 1.2,
                                 ),
-                                onPressed: deleteNote))
+                                onPressed: delete))
                       ],
                     ),
                   )
@@ -162,11 +180,55 @@ class _NoteDetails extends State<NoteDetails> {
     );
   }
 
-  void saveNote() {}
+  void saveNote() async {
+    moveToLastScreen();
 
-  void deleteNote() {}
+    debugPrint("saveNote");
+    _note.title = titleControler.text;
+    _note.description = contentControler.text;
+    _note.date = DateFormat.yMMMMd().format(DateTime.now());
+    int result;
+    if (_note.id == null) {
+      result = await dataBaseHelper.insertNote(_note);
+    } else {
+      result = await dataBaseHelper.updateNote(_note);
+    }
+
+    if (result != 0) {
+      _showAlertDialog("Save", "Saved Successfully");
+    } else {
+      _showAlertDialog("Save", "Save Failed.");
+    }
+  }
+
+  void delete() async {
+    moveToLastScreen();
+    if (_note.id == null) {
+      _showAlertDialog("Delete", "No note deleted.");
+      return;
+    } else {
+      var result = await dataBaseHelper.deleteNote(_note);
+      if (result != 0) {
+        _showAlertDialog("Delete", "Deleted Successfully");
+      } else {
+        _showAlertDialog("Delete", "Delete Failed.");
+      }
+    }
+
+    /*setState(() {
+      _currentSelected = '';
+    });*/
+  }
 
   void moveToLastScreen() {
-    Navigator.pop(context);
+    Navigator.pop(context, true);
+  }
+
+  void _showAlertDialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 }
