@@ -184,9 +184,10 @@ class _NoteDetails extends State<NoteDetails> {
     moveToLastScreen();
 
     debugPrint("saveNote");
-    _note.title = titleControler.text;
-    _note.description = contentControler.text;
+//    _note.title = titleControler.text;
+//    _note.description = contentControler.text;
     _note.date = DateFormat.yMMMMd().format(DateTime.now());
+    debugPrint('database ${_note.title} ${_note.description} ${_note.date} ${_note.priority}');
     int result;
     if (_note.id == null) {
       result = await dataBaseHelper.insertNote(_note);

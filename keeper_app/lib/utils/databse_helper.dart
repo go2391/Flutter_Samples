@@ -11,11 +11,11 @@ class DataBaseHelper {
   // ignore: unused_field
   static Database _database;
   String noteTable = "noteTable";
-  String colId = "ID";
-  String colTitle = "Title";
-  String colDescription = "Description";
-  String colDate = "Date";
-  String colPriority = "Priority";
+  static final String colId = "ID";
+  static final String colTitle = "Title";
+  static final String colDescription = "Description";
+  static final String colDate = "Date";
+  static final String colPriority = "Priority";
 
   DataBaseHelper._createInstance();
 
@@ -108,6 +108,8 @@ class DataBaseHelper {
     List<Note> _notesList = List<Note>();
     for (int i = 0; i < size; i++) {
       _notesList.add(Note.fromMapToObject(noteMaplist[i]));
+      debugPrint('${_notesList[i].title} ${_notesList[i].description} ${_notesList[i].date} ${_notesList[i].priority}');
+
     }
 
     return _notesList;

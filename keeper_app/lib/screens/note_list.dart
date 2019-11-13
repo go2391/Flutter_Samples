@@ -27,7 +27,7 @@ class _NoteList extends State<NoteList> {
         appBar: AppBar(
           title: Text("Notes"),
         ),
-        body: getNoteListView(context),
+        body: getNoteListView(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             navigateNote(Note('', '', 3, ''), "Add Note");
@@ -37,6 +37,49 @@ class _NoteList extends State<NoteList> {
         ));
   }
 
+  ListView getNoteListView() {
+
+    TextStyle titleStyle = Theme.of(context).textTheme.subhead;
+
+    return ListView.builder(
+      itemCount: count,
+      itemBuilder: (BuildContext context, int position) {
+        debugPrint('${this._notesList[position].title} ${this._notesList[position].description} ${this._notesList[position].date} ${this._notesList[position].priority}');
+        return Card(
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
+
+            leading: CircleAvatar(
+              backgroundColor: getPriorityColor(this._notesList[position].priority),
+              child: getPriorityIcon(this._notesList[position].priority),
+            ),
+
+            title: Text(this._notesList[position].title ?? "", style: titleStyle,),
+
+            subtitle: Text(this._notesList[position].description ?? ""),
+
+            trailing: GestureDetector(
+              child: Icon(Icons.delete, color: Colors.grey,),
+              onTap: () {
+                _delete(context, _notesList[position]);
+                _updateNotesList();
+              },
+            ),
+
+
+            onTap: () {
+              debugPrint("ListTile Tapped");
+              navigateNote(this._notesList[position],'Edit Note');
+            },
+
+          ),
+        );
+      },
+    );
+  }
+
+/*
   ListView getNoteListView(BuildContext buildContext) {
     TextStyle textStyle = Theme.of(context).textTheme.subhead;
 
@@ -71,6 +114,7 @@ class _NoteList extends State<NoteList> {
       },
     ).build(buildContext);
   }
+*/
 
   void navigateNote(Note note, String screenTitle) async {
     bool success =

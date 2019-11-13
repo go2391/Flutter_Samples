@@ -1,3 +1,5 @@
+import 'package:keeper_app/utils/databse_helper.dart';
+
 class Note {
   int _id;
   String _title;
@@ -47,22 +49,22 @@ class Note {
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     if (_id == null) {
-      map['id'] = _id;
+      map[DataBaseHelper.colId] = _id;
     }
-
-    map['title'] = _title;
-    map['description'] = _description;
-    map['date'] = _date;
-    map['priority'] = _priority;
+    map[DataBaseHelper.colTitle] = _title;
+    map[DataBaseHelper.colDescription] = _description;
+    map[DataBaseHelper.colDate] = _date;
+    map[DataBaseHelper.colPriority] = _priority;
     return map;
   }
 
   Note.fromMapToObject(Map<String, dynamic> map) {
-    this._id = map['id'];
-    this._title = map['title'];
-    this._description = map['description'];
-    this._date = map['date'];
-    this._priority = map['priority'];
+
+    this._id = map[DataBaseHelper.colId];
+    this._title = map[DataBaseHelper.colTitle];
+    this._description = map[DataBaseHelper.colDescription];
+    this._date = map[DataBaseHelper.colDate];
+    this._priority = map[DataBaseHelper.colPriority];
   }
 
   //priority text
