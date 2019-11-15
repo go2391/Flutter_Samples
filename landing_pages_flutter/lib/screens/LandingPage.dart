@@ -1,5 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:landing_pages_flutter/screens/signup.dart';
 import 'package:landing_pages_flutter/widgets/buttons.dart';
 
 class LandingPage extends StatefulWidget {
@@ -65,12 +66,15 @@ class _LandingPageState extends State<LandingPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  CustomButton("LOG IN", onPressed: () {}),
+                  CustomButton("LOG IN", onPressed: () {
+                    _navigateToSingup();
+                  }),
                   SizedBox(
                     width: 50,
                   ),
-                  CustomButton("SIGN UP",
-                      onPressed: () {}, type: CustomButton.active)
+                  CustomButton("SIGN UP", onPressed: () {
+                    _navigateToSingup();
+                  }, type: CustomButton.active)
                 ],
               ),
             )
@@ -79,5 +83,9 @@ class _LandingPageState extends State<LandingPage> {
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _navigateToSingup() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 }

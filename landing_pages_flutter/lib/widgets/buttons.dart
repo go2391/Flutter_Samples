@@ -18,9 +18,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RaisedButton(
       color: type != active ? Colors.white : Constants.app_color,
-      onPressed: () {
-        _loginPressed();
-      },
+      onPressed: this.onPressed,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
           side: BorderSide(color: Constants.app_color)),
@@ -34,8 +32,6 @@ class CustomButton extends StatelessWidget {
       ),
     );
   }
-
-  void _loginPressed() {}
 }
 
 class RaisedGradientButton extends StatelessWidget {

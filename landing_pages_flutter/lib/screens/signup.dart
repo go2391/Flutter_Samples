@@ -30,16 +30,22 @@ class _SignUp extends State<SignUp> {
                 "Please take a moment to veriy your phone number.",
                 style: TextStyle(
                   color: Colors.black87,
+                  fontSize: 14
                 ),
               ),
-              Text(
-                "We will send you a One Time Passcode",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.blue,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "We will send you a One Time Passcode",
+
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
                 ),
               ),
               TextFormField(
+                maxLength: 10,
                 controller: _mobileControler,
                 keyboardType: TextInputType.number,
                 style: TextStyle(
