@@ -39,11 +39,12 @@ class _SIForm extends State<SIForm> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = Theme.of(context).textTheme.title;
+    TextStyle textStyle = Theme.of(context).textTheme.subtitle;
+
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text("Sample Interest Calculator"),
+          title: Text("Simple Interest Calculator"),
         ),
         body: Form(
           key: _formKey,
@@ -62,18 +63,16 @@ class _SIForm extends State<SIForm> {
                     inputFormatters: <TextInputFormatter>[
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
-                    validator: (String value){
-                      if(value.isEmpty)
-                        {
-                          return 'Please enter principle amount';
-                        }
-                    }
-                      ,
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please enter principle amount';
+                      }
+                    },
                     decoration: InputDecoration(
-                      errorStyle: TextStyle(
-                        fontSize: 13,
+                        errorStyle: TextStyle(
+                          fontSize: 13,
+                        ),
 
-                      ),
                         labelStyle: textStyle,
                         hintText: "Principal",
                         border: OutlineInputBorder(
@@ -94,20 +93,16 @@ class _SIForm extends State<SIForm> {
                 Padding(
                   padding: EdgeInsets.only(top: minPadding, bottom: minPadding),
                   child: TextFormField(
-
                     controller: rateOfInterestControler,
-                    validator: (String value){
-                      if(value.isEmpty)
-                      {
+                    validator: (String value) {
+                      if (value.isEmpty) {
                         return 'Please enter rate of interest';
                       }
                     },
                     keyboardType: TextInputType.number,
-
                     decoration: InputDecoration(
                         errorStyle: TextStyle(
                           fontSize: 13,
-
                         ),
                         labelStyle: textStyle,
                         hintText: "Rate of interest",
@@ -134,12 +129,11 @@ class _SIForm extends State<SIForm> {
                       Expanded(
                           child: TextFormField(
                         controller: termControler,
-                            validator: (String value){
-                              if(value.isEmpty)
-                              {
-                                return 'Please enter term';
-                              }
-                            },
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return 'Please enter term';
+                          }
+                        },
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           WhitelistingTextInputFormatter.digitsOnly
@@ -147,7 +141,6 @@ class _SIForm extends State<SIForm> {
                         decoration: InputDecoration(
                             errorStyle: TextStyle(
                               fontSize: 13,
-
                             ),
                             labelStyle: textStyle,
                             hintText: "Term",
@@ -203,6 +196,11 @@ class _SIForm extends State<SIForm> {
                                 textScaleFactor: 1.5,
                               ),
                               onPressed: calculateTotal)),
+
+                        Container(
+                          width: 10,
+                        )
+            ,
                       Expanded(
                           child: RaisedButton(
                               color: Theme.of(context).primaryColorDark,
@@ -229,10 +227,10 @@ class _SIForm extends State<SIForm> {
 
   Widget getImageAsser() {
     AssetImage image = AssetImage('images/money.png');
-    Image imageasset = Image(image: image, width: 125.0, height: 125.0);
+    Image imageasset = Image(image: image, width: 75.0, height: 75.0);
     return Container(
       child: imageasset,
-      margin: EdgeInsets.all(minPadding * 10.0),
+      margin: EdgeInsets.all(minPadding * 3.0),
     );
   }
 
@@ -244,9 +242,9 @@ class _SIForm extends State<SIForm> {
         ((num.parse(rateOfInterest.isEmpty ? "0" : rateOfInterest) / 100) *
             num.parse(term.isEmpty ? "0" : term));
     setState(() {
-      if(_formKey.currentState.validate())
-      _totalAmount =
-          "Principle Amount : $principle \nTotal Interest Amount : ${interest} \nTotal Amount : ${principle + interest}";
+      if (_formKey.currentState.validate())
+        _totalAmount =
+            "Principle Amount : $principle \nTotal Interest Amount : ${interest} \nTotal Amount : ${principle + interest}";
     });
   }
 

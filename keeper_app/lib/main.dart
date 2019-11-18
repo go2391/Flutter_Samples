@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:keeper_app/screens/NoteDetail.dart';
 import 'package:keeper_app/screens/note_list.dart';
+import 'package:keeper_app/screens/otp_verify.dart';
+import 'package:keeper_app/screens/signUp.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.deepPurple,
       ),
-      home: NoteList(),
+      home: SignUp("8686474486"),
     );
   }
 }
